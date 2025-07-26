@@ -2,13 +2,13 @@ version: '3.9'
 
 services:
   backend:
-    image: rag-backend:latest
+    image: chat-docs-backend:latest
     build:
       context: .
       dockerfile: docker/backend.Dockerfile
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
-    container_name: rag-backend
+    container_name: chat-docs-backend
     environment:
       - BACKEND_PORT=${BACKEND_PORT}
     volumes:
@@ -16,13 +16,13 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: rag-frontend:latest
+    image: chat-docs-frontend:latest
     build:
       context: .
       dockerfile: docker/frontend.Dockerfile
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    container_name: rag-frontend
+    container_name: chat-docs-frontend
     environment:
       - FRONTEND_PORT=${FRONTEND_PORT}
     volumes:
