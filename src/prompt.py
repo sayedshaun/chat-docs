@@ -13,13 +13,10 @@ from langchain.schema import SystemMessage, HumanMessage, AIMessage
 def document_executor_prompt() -> PromptTemplate:
     template="""Answer the question based only on the following context:
 
-    Context: 
-    {context}
-    ---------
-    Question:
-    {question}
-    ---------
-
+    Context: {context}
+    
+    Question: {question}
+    
     If you don't find the answer in the context, say "I don't know"
     """
     return PromptTemplate(
