@@ -10,5 +10,4 @@
 data
 database
 __pycache__
-.streamlit
 .chromadb
