@@ -1,12 +1,12 @@
-# RAG Chatbot
+# ChatDocs: A private knowledge base chatbot to chat with your documents
 
 This is a RAG chatbot that uses LangChain and LangGraph to build a chatbot that can answer questions based on a given document.
 
 ## Setup
 
 ```bash
-git clone sayedshaun/rag-chatbot
-cd rag-chatbot
+git clone https://github.com/sayedshaun/chat-docs.git
+cd chat-docs
 ```
 ### Setup Environment Variables
 
@@ -19,6 +19,8 @@ FRONTEND_PORT=9010
 # If you use ollama model
 OLLAMA_MODEL=llama3.2
 ```
+
+If you use ollama model, you need to set up [ollama](https://ollama.com/download) first.
 
 ## Start Server
 ```bash
@@ -36,4 +38,4 @@ docker compose up --build
 
 
 ## Supported Language
-- English
+Based on embedding model and document type. text pictures does not support yet but will be available soon.
