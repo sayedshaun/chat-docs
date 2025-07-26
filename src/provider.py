@@ -53,7 +53,7 @@ def huggingface_embedding() -> HuggingFaceEmbeddings:
     return HuggingFaceEmbeddings(model_name=HUGGINGFACE_EMBEDDING_MODEL)
 
 
-llm = google_llm()
-embedding = huggingface_embedding()
+llm = ollama_llm()
+embedding = ollama_embedding()
 
 __all__ = ["llm", "embedding"]
