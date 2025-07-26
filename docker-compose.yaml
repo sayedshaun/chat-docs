@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  backend:
+    image: rag-backend:latest
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    container_name: rag-backend
+    environment:
+      - BACKEND_PORT=${BACKEND_PORT}
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  frontend:
+    image: rag-frontend:latest
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    container_name: rag-frontend
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    depends_on:
+      - backend

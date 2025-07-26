@@ -1,0 +1,14 @@
+*.db
+*.sqlite
+*.log
+*.pyc
+*.pyo
+*.py.class
+*.env
+
+# Directories
+data
+database
+__pycache__
+.streamlit
+.chromadb
