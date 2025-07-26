@@ -57,7 +57,7 @@ async def upload_files(files: List[UploadFile] = File(...)):
             file_path = os.path.join(temp_dir, uploaded_file.filename)
             with open(file_path, "wb") as f:
                 shutil.copyfileobj(uploaded_file.file, f)
-        return JSONResponse(content={"status": "success"})
+        return JSONResponse(content={"status": "Upload Success"})
     except Exception as e:
         raise RuntimeError(f"Failed to upload files: {str(e)}")
 
@@ -67,9 +67,9 @@ async def update_db():
         system_temp_dir = tempfile.gettempdir()
         temp_dir = os.path.join(system_temp_dir, ".temp")
         if not os.path.exists(temp_dir) or not os.listdir(temp_dir):
-            return JSONResponse(content={"status": "error"})
+            return JSONResponse(content={"status": "No files found in temp directory"})
         update_database(temp_dir)
         shutil.rmtree(temp_dir)
-        return JSONResponse(content={"status": "success"})
+        return JSONResponse(content={"status": "Database Updated"})
     except Exception as e:
         raise RuntimeError(f"Failed to update database: {str(e)}")
