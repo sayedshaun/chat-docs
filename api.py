@@ -1,12 +1,10 @@
 import asyncio
-import json
 from typing import AsyncGenerator, List
 from src.ingest import update_database
 from src.graph import build_graph
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import subprocess
 import shutil
 import os
 import tempfile
@@ -17,13 +15,13 @@ load_dotenv()
 app = FastAPI()
 config={"configurable":{"thread_id":1}}
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 async def health_check():
@@ -59,12 +57,9 @@ async def upload_files(files: List[UploadFile] = File(...)):
             file_path = os.path.join(temp_dir, uploaded_file.filename)
             with open(file_path, "wb") as f:
                 shutil.copyfileobj(uploaded_file.file, f)
-        return {
-            "status": "success",
-            "message": f"{len(files)} files uploaded to {temp_dir}"
-        }
+        return JSONResponse(content={"status": "success"})
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        raise RuntimeError(f"Failed to upload files: {str(e)}")
 
 @app.post("/update_database/")
 async def update_db():
@@ -72,20 +67,9 @@ async def update_db():
         system_temp_dir = tempfile.gettempdir()
         temp_dir = os.path.join(system_temp_dir, ".temp")
         if not os.path.exists(temp_dir) or not os.listdir(temp_dir):
-            return {
-                "status": "error",
-                "message": f"No files found in {temp_dir}. Please upload first."
-            }
+            return JSONResponse(content={"status": "error"})
         update_database(temp_dir)
         shutil.rmtree(temp_dir)
-        return {
-            "status": "success",
-            "message": f"Database updated from files in {temp_dir}"
-        }
+        return JSONResponse(content={"status": "success"})
     except Exception as e:
         raise RuntimeError(f"Failed to update database: {str(e)}")
-        
-
-# if __name__ == "__main__":
-#     backend_port = os.getenv("BACKEND_PORT", "9010")
-#     subprocess.run(["uvicorn", "api:app", "--host", "0.0.0.0", "--port", str(backend_port), "--reload"])
