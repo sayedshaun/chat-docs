@@ -1,4 +1,5 @@
-langchain
+![alt text](docs/cover.jpg)
+
 # ChatDocs: A private knowledge base chatbot to chat with your documents
 
 This is a RAG chatbot that uses LangChain and LangGraph to build a chatbot that can answer questions based on a given document.
