@@ -17,7 +17,8 @@ def load_files_from_directory(directory: str) -> List:
     Supports PDF files and other text-based formats.
     """
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500, chunk_overlap=50
+        chunk_size=os.getenv("CHUNK_SIZE"), 
+        chunk_overlap=os.getenv("CHUNK_OVERLAP")
     )
     pdf_docs = splitter.split_documents(
         DirectoryLoader(

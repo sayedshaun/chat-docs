@@ -1,3 +1,4 @@
+langchain
 # ChatDocs: A private knowledge base chatbot to chat with your documents
 
 This is a RAG chatbot that uses LangChain and LangGraph to build a chatbot that can answer questions based on a given document.
@@ -10,11 +11,17 @@ cd chat-docs
 ```
 ### Setup Environment Variables
 
+Create `.env` file and add the following environment variables:
 ```bash
 GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 HUGGINGFACE_EMBEDDING_MODEL=all-MiniLM-L6-v2
 BACKEND_PORT=8010
 FRONTEND_PORT=9010
+
+# Configuration
+# Confgis
+CHUNK_SIZE=500
+CHUNK_OVERLAP=50
 
 # If you use ollama model
 OLLAMA_MODEL=llama3.2
