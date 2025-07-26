@@ -56,14 +56,14 @@ with st.sidebar:
             if r.status_code != 200:
                 st.error("Upload failed: " + r.json().get("message", str(r)))
                 st.stop()
-            st.success(r.json()["message"])
+            st.success(r.json().get("status", "Files uploaded successfully"))
 
         with st.spinner("Ingesting documents into vector DB..."):
             r = requests.post(f"{API_BASE}/update_database/")
             if r.status_code != 200:
                 st.error("Update failed: " + r.json().get("message", str(r)))
             else:
-                st.success(r.json()["message"])
+                st.success(r.json().get("status", "Files uploaded successfully"))
 
 
 st.title("📚 Chat with Documents")
