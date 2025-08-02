@@ -1,6 +1,6 @@
 import asyncio
 from typing import AsyncGenerator, List
-from src.ingest import update_database
+from src.ingest import update_vectorstore
 from src.graph import build_graph
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
@@ -68,7 +68,7 @@ async def update_db():
         temp_dir = os.path.join(system_temp_dir, ".temp")
         if not os.path.exists(temp_dir) or not os.listdir(temp_dir):
             return JSONResponse(content={"status": "No files found in temp directory"})
-        update_database(temp_dir)
+        update_vectorstore(temp_dir)
         shutil.rmtree(temp_dir)
         return JSONResponse(content={"status": "Database Updated"})
     except Exception as e:
