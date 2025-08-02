@@ -19,7 +19,6 @@ HUGGINGFACE_EMBEDDING_MODEL=all-MiniLM-L6-v2
 BACKEND_PORT=8010
 FRONTEND_PORT=9010
 
-# Configuration
 # Confgis
 CHUNK_SIZE=500
 CHUNK_OVERLAP=50
@@ -40,9 +39,18 @@ docker compose up --build
 ![alt text](docs/image.png)
 
 ## Supported Document
-- PDF
-- Word
-- TXT
+| File Type      | Extensions         | Description                |
+|----------------|-------------------|----------------------------|
+| PDF            | `.pdf`            | Portable Document Format   |
+| Word           | `.doc`, `.docx`   | Microsoft Word Documents   |
+| Text           | `.txt`            | Plain Text Files           |
+| Markdown       | `.md`             | Markdown Files             |
+| HTML           | `.html`, `.htm`   | HyperText Markup Language  |
+| PowerPoint     | `.ppt`, `.pptx`   | Microsoft PowerPoint Files |
+| Excel          | `.xls`, `.xlsx`   | Microsoft Excel Files      |
+| XML            | `.xml`            | XML Data Files             |
+| Email          | `.eml`            | Email Message Files        |
+| JSON           | `.json`           | JavaScript Object Notation |
 
 
 ## Supported Language
