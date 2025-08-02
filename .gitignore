@@ -5,9 +5,12 @@
 *.pyo
 *.py.class
 *.env
-
-# Directories
+*.ipynb_checkpoints
+*.ipynb
 data
 database
 __pycache__
 .chromadb
+.database
+.vscode
+.idea
