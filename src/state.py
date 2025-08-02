@@ -1,12 +1,7 @@
-from typing import Any, TypedDict, Optional, List, Dict, Union
-from langchain_core.documents import Document
-from langchain_core.messages import HumanMessage, AIMessage
+# state.py
+from typing import TypedDict, List, Annotated
+from langgraph.graph.message import BaseMessage, add_messages
 
-class Message(TypedDict):
-    role: str
-    content: str
 
-class GraphState(TypedDict, total=False):
-    question: str
-    metadata: Dict[str, Any]
-    answer: Optional[str]
+class AgentState(TypedDict, total=False):
+    messages: Annotated[List[BaseMessage], add_messages]
