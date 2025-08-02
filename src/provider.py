@@ -30,7 +30,7 @@ def google_llm() -> ChatGoogleGenerativeAI:
     if not GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEY is not set in environment variables")
     return ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash", 
+        model="gemini-2.5-flash", 
         api_key=GEMINI_API_KEY
     )
 
@@ -53,7 +53,7 @@ def huggingface_embedding() -> HuggingFaceEmbeddings:
     return HuggingFaceEmbeddings(model_name=HUGGINGFACE_EMBEDDING_MODEL)
 
 
-llm = ollama_llm()
-embedding = ollama_embedding()
+llm = google_llm()
+embedding = huggingface_embedding()
 
 __all__ = ["llm", "embedding"]
