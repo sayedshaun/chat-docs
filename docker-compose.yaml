@@ -1,27 +1,72 @@
 # docker-compose.yaml
+
 services:
+
+  postgresql:
+    image: postgres:14.18
+    container_name: chatdocs-postgresql
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  vectorstore:
+    image: chromadb/chroma:1.0.16.dev100
+    container_name: chatdocs-vectorstore
+    ports:
+      - "${CHROMADB_PORT}:8000"  # maps host:container
+    volumes:
+      - chroma_data:/data        # persistent volume for Chroma
+    restart: unless-stopped
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
-    image: chat-docs-backend:latest
+    image: chatdocs-backend:latest
     build:
       context: .
-      dockerfile: docker/backend.Dockerfile
+      dockerfile: dockerfiles/backend.Dockerfile
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
-    container_name: chat-docs-backend
+      - "${BACKEND_PORT}:8000"
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    container_name: chatdocs-backend
     environment:
       - BACKEND_PORT=${BACKEND_PORT}
     volumes:
       - .:/app
     restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgresql
+      - vectorstore
 
   frontend:
-    image: chat-docs-frontend:latest
+    image: chatdocs-frontend:latest
     build:
       context: .
-      dockerfile: docker/frontend.Dockerfile
+      dockerfile: dockerfiles/frontend.Dockerfile
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    container_name: chat-docs-frontend
+      - "${FRONTEND_PORT}:8501"
+    command: streamlit run app.py --server.port 8501
+    container_name: chatdocs-frontend
     environment:
       - FRONTEND_PORT=${FRONTEND_PORT}
     volumes:
@@ -29,3 +74,9 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    env_file:
+      - .env
+
+volumes:
+  chroma_data:
+  postgresql_data:
