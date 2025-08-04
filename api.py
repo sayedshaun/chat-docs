@@ -1,7 +1,7 @@
 import asyncio
 from typing import AsyncGenerator, List
 from src.ingest import update_database
-from src.graph import build_graph
+from src.graph import create_graph
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,13 +29,13 @@ async def health_check():
 
 @app.post("/ask", response_model=LLMResponse)
 async def ask_question(question: Question) -> LLMResponse:
-    graph = build_graph()
+    graph = create_graph()
     response = graph.invoke({"question": question.question}, config=config)
-    return LLMResponse(answer=response["answer"])
+    return LLMResponse(answer=response["messages"][-1].content)
 
 @app.post("/ask_stream")
 async def ask_question_stream(question: Question) -> StreamingResponse:
-    graph = build_graph()
+    graph = create_graph()
     async def token_stream() -> AsyncGenerator[str, None]:
         for msg, metadata in graph.stream(
             {"question": question.question}, 
