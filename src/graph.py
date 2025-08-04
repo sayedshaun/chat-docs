@@ -17,7 +17,7 @@ def rag_agent_node(state: AgentState) -> Dict[str, Any]:
     return {"messages": [response["output"]]}
 
 
-def create_workflow() -> CompiledStateGraph:
+def create_graph() -> CompiledStateGraph:
     """ Create the workflow for the RAG agent."""
     checkpointer = InMemorySaver()
     graph = StateGraph(AgentState)
