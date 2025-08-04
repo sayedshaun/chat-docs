@@ -1,4 +1,5 @@
 # docker/backend.Dockerfile
+
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -13,16 +14,9 @@ RUN apt-get update \
     libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
-
-# Expose port
-EXPOSE ${BACKEND_PORT}
-
-# Run application
-CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port $BACKEND_PORT --reload"]
 
