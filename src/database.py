@@ -18,7 +18,8 @@ def _start_vectorstore_session() -> ElasticsearchStore:
     """Initialize the vectorstore session with Elasticsearch."""
     ES_INDEX_NAME = os.getenv("ES_INDEX_NAME", "chatdocs")
     ES_PORT = os.getenv("ES_PORT")
-    conn_url = f"http://localhost:{ES_PORT}"
+    HOSTNAME = os.getenv("HOSTNAME", "localhost")
+    conn_url = f"http://{HOSTNAME}:{ES_PORT}"
     es = Elasticsearch(hosts=[conn_url])
     vectorstore = ElasticsearchStore(
         index_name=ES_INDEX_NAME,
@@ -31,22 +32,17 @@ def _start_vectorstore_session() -> ElasticsearchStore:
 
 @lru_cache(maxsize=1)
 def start_vectorstore_session() -> Chroma:
-    index = os.getenv("CHROMADB_INDEX", "chatdocs")
-    port = os.getenv("CHROMADB_PORT", "9012")       
-    host = os.getenv("CHROMADB_HOST", "localhost") 
-    preset = os.getenv("CHROMADB_PRESET", ".vectorstore")
+    INDEX = os.getenv("CHROMADB_INDEX", "chatdocs")
+    PRESET = os.getenv("CHROMADB_PRESET", ".vectorstore")
 
-    settings = Settings(
-        chroma_server_host=host,
-        chroma_server_http_port=port,
-    )
-    client = HttpClient(host=host, port=port, settings=settings)
+    settings = Settings(allow_reset=True, anonymized_telemetry=False)
+    client = HttpClient(host="vectorstore", port=8000, settings=settings)
 
     vectorstore = Chroma(
-        collection_name=index,
+        collection_name=INDEX,
         embedding_function=embedding,
         client=client,
-        persist_directory=preset,  
+        persist_directory=PRESET
     )
     return vectorstore
 
@@ -55,12 +51,12 @@ def start_postgresql_session() -> SQLDatabase:
     """Initialize the SQL database session with PostgreSQL."""
     POSTGRES_USER = os.getenv("POSTGRES_USER")
     POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_PORT = os.getenv("POSTGRES_PORT")
     POSTGRES_DB = os.getenv("POSTGRES_DB")
+    PORT = os.getenv("POSTGRES_PORT")
     
     POSTGRES_URL = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-        f"@localhost:{POSTGRES_PORT}/{POSTGRES_DB}"
+        f"@chatdocs-postgresql:{PORT}/{POSTGRES_DB}"
     )
     engine = create_engine(POSTGRES_URL)
     return SQLDatabase(engine=engine)
