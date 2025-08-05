@@ -82,7 +82,7 @@ if prompt := st.chat_input("Ask something..."):
             try:
                 with requests.post(
                     f"{API_BASE}/ask_stream",
-                    json={"question": prompt},
+                    json={"content": prompt},
                     stream=True,
                     headers={"Accept": "text/event-stream"}
                 ) as r:
@@ -101,7 +101,3 @@ if prompt := st.chat_input("Ask something..."):
     st.session_state.messages.append(
         {"role": "assistant", "content": full_response}
     )
-
-if __name__ == "__main__":
-    frontend_port = os.getenv("FRONTEND_PORT", "9011")
-    subprocess.run(["streamlit", "run", "app.py", "--server.port=" + frontend_port, "--server.enableCORS=false"])
