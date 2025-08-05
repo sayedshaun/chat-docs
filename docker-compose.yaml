@@ -37,12 +37,11 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://localhost:8000 || exit 1"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:8000/api/v2/heartbeat || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-
 
   backend:
     image: chatdocs-backend:latest
@@ -51,7 +50,7 @@ services:
       dockerfile: dockerfiles/backend.Dockerfile
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
-    command: uvicorn api:app --host 0.0.0.0 --port ${BACKEND_PORT} --reload
+    command: uvicorn src.backend.main:app --host 0.0.0.0 --port ${BACKEND_PORT} --reload
     container_name: chatdocs-backend
     environment:
       - BACKEND_PORT=${BACKEND_PORT}
@@ -81,6 +80,7 @@ services:
       dockerfile: dockerfiles/frontend.Dockerfile
     ports:
       - "${FRONTEND_PORT}:8501"
+    working_dir: /app/src/ui
     command: streamlit run app.py --server.port ${FRONTEND_PORT} --server.address 0.0.0.0 --server.enableCORS=false
     container_name: chatdocs-frontend
     environment:
