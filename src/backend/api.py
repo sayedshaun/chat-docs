@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
 import tempfile
-from src.schema import LLMResponse, Question
+from src.backend.schema import LLMResponse, Question
 from dotenv import load_dotenv
 
 load_dotenv()
