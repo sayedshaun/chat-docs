@@ -74,12 +74,26 @@ OLLAMA_MODEL=llama3.2
 
 If you use ollama model, you need to set up [ollama](https://ollama.com/download) first.
 
-## Start Server
+# Usage
+
+### Start Server
 ```bash
 docker compose up --build
 ```
 
-## Overview
+### API
+
+ChatDocs built with FastAPI, so you can view the API documentation with Swagger UI. Here is the reference of the available endpoints:
+
+#### API Reference
+- Ask Question: `http://{HOST}:{BACKEND_PORT}/ask`
+- Get stream response: `http://{HOST}:{BACKEND_PORT}/ask_stream`
+- Upload Files: `http://{HOST}:{BACKEND_PORT}/upload_files`
+- Update Database: `http://{HOST}:{BACKEND_PORT}/update_database`
+
+
+## Prebuilt UI
+`ChatDocs` provides a prebuilt UI, you can access it at `http://{HOST}:{FRONTEND_PORT}`, e.g. `http://localhost:9011`.
 
 ![alt text](docs/image.png)
 
@@ -101,3 +115,6 @@ docker compose up --build
 
 ## Supported Language
 Based on embedding model and document type. text pictures does not support yet but will be available soon.
+
+
+
