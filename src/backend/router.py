@@ -6,7 +6,6 @@ from src.rag.graph import create_graph
 from src.rag.prompt import create_agent_prompt
 from fastapi import APIRouter, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
-from langchain_core.messages import BaseMessage, AIMessage
 import shutil
 import os
 import tempfile
@@ -24,23 +23,19 @@ load_dotenv()
 
 router = APIRouter()
 config={"configurable":{"thread_id":1}}
+graph = create_graph()
 
 
 @router.post("/ask", response_model=Message)
 async def ask_question(message: Message) -> Message:
-    graph = create_graph()
-    input_prompt = create_agent_prompt(message)
+    input_prompt = create_agent_prompt(message.content)
     response = graph.invoke(input_prompt, config=config)
-    messages: List[BaseMessage] = response.get("messages", [])
-    last_ai_msg = next((m for m in reversed(messages) if isinstance(m, AIMessage)), None)
-    if not last_ai_msg:
-        return Message(content="Sorry, I couldn't generate a response.")
+    last_ai_msg = response["messages"][-1]
     return Message(content=last_ai_msg.content)
 
 
 @router.post("/ask_stream", response_class=StreamingResponse)
 async def ask_question_stream(question: Message) -> StreamingResponse:
-    graph = create_graph()
     async def token_stream() -> AsyncGenerator[str, None]:
         for msg, metadata in graph.stream(
             {"messages": question.content}, 
