@@ -1,6 +1,7 @@
 # graph.py
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.state import CompiledStateGraph
+from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.messages import AIMessage
 from .state import AgentState
@@ -8,6 +9,7 @@ from typing import Dict, Any
 from .tools import TOOLS
 from .provider import llm
 from .agent import create_rag_agent 
+from .prompt import create_agent_prompt
 
 
 def rag_agent_node(state: AgentState) -> Dict[str, Any]:
@@ -16,6 +18,15 @@ def rag_agent_node(state: AgentState) -> Dict[str, Any]:
     agent = create_rag_agent(llm=llm, tools=TOOLS, verbose=False)
     response = agent.invoke(message)
     message = AIMessage(content=response["output"])
+    return {"messages": [message]}
+
+
+def react_agent_node(state: AgentState) -> Dict[str, Any]:
+    """Node that invokes the React agent to process the state."""
+    message = state["messages"]
+    agent = create_react_agent(model=llm, tools=TOOLS)
+    response = agent.invoke({"messages": message})
+    message = response["messages"][-1]
     return {"messages": [message]}
 
 
