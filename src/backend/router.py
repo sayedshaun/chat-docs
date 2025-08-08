@@ -1,10 +1,11 @@
 # router.py
 import asyncio
+from contextlib import asynccontextmanager
 from typing import AsyncGenerator, List
 from src.rag.ingest import update_database
 from src.rag.graph import create_graph
 from src.rag.prompt import create_agent_prompt
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, UploadFile, FastAPI
 from fastapi.responses import StreamingResponse, JSONResponse
 import shutil
 import os
@@ -20,25 +21,31 @@ logging.basicConfig(
 
 
 load_dotenv()
-
 router = APIRouter()
 config={"configurable":{"thread_id":1}}
-graph = create_graph()
+graph = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global graph
+    graph = await create_graph()
+    yield
 
 
 @router.post("/ask", response_model=Message)
 async def ask_question(message: Message) -> Message:
     input_prompt = create_agent_prompt(message.content)
-    response = graph.invoke(input_prompt, config=config)
+    response = await graph.ainvoke(input_prompt, config=config)
     last_ai_msg = response["messages"][-1]
     return Message(content=last_ai_msg.content)
 
 
 @router.post("/ask_stream", response_class=StreamingResponse)
 async def ask_question_stream(question: Message) -> StreamingResponse:
+    input_prompt = create_agent_prompt(question.content)
     async def token_stream() -> AsyncGenerator[str, None]:
-        for msg, metadata in graph.stream(
-            {"messages": question.content}, 
+        async for msg, metadata in graph.astream(
+            input_prompt, 
             stream_mode="messages", 
             config=config
             ):

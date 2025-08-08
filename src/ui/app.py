@@ -85,7 +85,7 @@ if prompt := st.chat_input("Ask something..."):
                     json={"content": prompt},
                     stream=True,
                     headers={"Accept": "text/event-stream"}
-                ) as r:
+                    ) as r:
                     r.raise_for_status()
                     for chunk in r.iter_lines(delimiter=b"\n"):
                         if chunk:
