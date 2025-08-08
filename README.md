@@ -51,26 +51,39 @@ cd chat-docs
 Create `.env` file and add the following environment variables:
 You can customize the environment variables as per your requirements.
 ```bash
-GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-HUGGINGFACE_EMBEDDING_MODEL=all-MiniLM-L6-v2
-# .env
+OLLAMA_MODEL=llama3.2
 POSTGRES_DB=chatdocs
 CHROMADB_INDEX=chatdocs
-# Auth
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 CHROMADB_PRESET=./vectorstore
-# Ports
 BACKEND_PORT=9010
 FRONTEND_PORT=9011
 CHROMADB_PORT=9012
 POSTGRES_PORT=9013
-# Confgis
-CHUNK_SIZE=500
-CHUNK_OVERLAP=50
-# If you use ollama model
-OLLAMA_MODEL=llama3.2
 ```
+
+### All Valid Values for Environment Variables
+
+| Environment Variable          | Valid Values |
+|-------------------------------|--------------|
+| `GEMINI_API_KEY`              | `str`        | 
+| `GEMINI_MODEL`                | `str`        | 
+| `GEMINI_EMBEDDING_MODEL`      | `str`        | 
+| `HUGGINGFACE_EMBEDDING_MODEL` | `str`        | 
+| `OLLAMA_MODEL`                | `str`        | 
+| `CHUNK_SIZE`                  | `int`        | 
+| `CHUNK_OVERLAP`               | `int`        | 
+| `CHROMADB_INDEX`              | `str`        | 
+| `CHROMADB_PRESET`             | `str`        | 
+| `POSTGRES_USER`               | `str`        | 
+| `POSTGRES_PASSWORD`           | `str`        |
+| `POSTGRES_DB`                 | `str`        |
+| `BACKEND_PORT`                | `int`        |
+| `FRONTEND_PORT`               | `int`        |
+| `CHROMADB_PORT`               | `int`        |
+| `POSTGRES_PORT`               | `int`        |
+
 
 If you use ollama model, you need to set up [ollama](https://ollama.com/download) first.
 
@@ -86,10 +99,12 @@ docker compose up --build
 ChatDocs built with FastAPI, so you can view the API documentation with Swagger UI. Here is the reference of the available endpoints:
 
 #### API Reference
-- Ask Question: `http://{HOST}:{BACKEND_PORT}/ask`
-- Get stream response: `http://{HOST}:{BACKEND_PORT}/ask_stream`
-- Upload Files: `http://{HOST}:{BACKEND_PORT}/upload_files`
-- Update Database: `http://{HOST}:{BACKEND_PORT}/update_database`
+| Action              | Endpoint                                       |
+|---------------------|------------------------------------------------|
+| Ask Question        | `http://{HOST}:{BACKEND_PORT}/ask`             |
+| Get stream response | `http://{HOST}:{BACKEND_PORT}/ask_stream`      |
+| Upload Files        | `http://{HOST}:{BACKEND_PORT}/upload_files`    |
+| Update Database     | `http://{HOST}:{BACKEND_PORT}/update_database` |
 
 
 ## Prebuilt UI
@@ -113,8 +128,6 @@ ChatDocs built with FastAPI, so you can view the API documentation with Swagger 
 | CSV            | `.csv`            | Comma-Separated Values     |
 
 
+
 ## Supported Language
 Based on embedding model and document type. text pictures does not support yet but will be available soon.
-
-
-
