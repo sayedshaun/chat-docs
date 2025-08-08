@@ -10,33 +10,33 @@ The project is structured as follows:
 
 ```bash
 chat-docs/
-    ├── README.md
     ├── dockerfiles/
-    │   ├── backend.Dockerfile
-    │   └── frontend.Dockerfile
+    │     ├── backend.Dockerfile
+    │     └── frontend.Dockerfile
     ├── docs/
-    │   ├── cover.jpg
-    │   └── image.png
+    │     ├── cover.jpg
+    │     └── image.png
     ├── src/
     │    ├── __init__.py
     │    ├── backend/
-    │    │   ├── __init__.py
-    │    │   ├── ...
-    │    │   └── ...
+    │    │     ├── __init__.py
+    │    │     ├── ...
+    │    │     └── ...
     │    ├── rag/
-    │    │   ├── __init__.py
-    │    │   ├── ...
-    │    │   └── ...
+    │    │     ├── __init__.py
+    │    │     ├── ...
+    │    │     └── ...
     │    ├── ui/
-    │    │   ├── __init__.py
-    │    │   ├── ...
-    │    │   └── ...
+    │    │     ├── __init__.py
+    │    │     ├── ...
+    │    │     └── ...
     │    └── __init__.py
     ├── .env
     ├── .gitignore
     ├── .dockerignore
     ├── docker-compose.yml
     ├── requirements.txt
+    ├── README.md
     └── LICENSE
 ```
 
@@ -63,26 +63,26 @@ CHROMADB_PORT=9012
 POSTGRES_PORT=9013
 ```
 
-### All Valid Values for Environment Variables
+#### All Valid Values for Environment Variables
 
-| Environment Variable          | Valid Values |
-|-------------------------------|--------------|
-| `GEMINI_API_KEY`              | `str`        | 
-| `GEMINI_MODEL`                | `str`        | 
-| `GEMINI_EMBEDDING_MODEL`      | `str`        | 
-| `HUGGINGFACE_EMBEDDING_MODEL` | `str`        | 
-| `OLLAMA_MODEL`                | `str`        | 
-| `CHUNK_SIZE`                  | `int`        | 
-| `CHUNK_OVERLAP`               | `int`        | 
-| `CHROMADB_INDEX`              | `str`        | 
-| `CHROMADB_PRESET`             | `str`        | 
-| `POSTGRES_USER`               | `str`        | 
-| `POSTGRES_PASSWORD`           | `str`        |
-| `POSTGRES_DB`                 | `str`        |
-| `BACKEND_PORT`                | `int`        |
-| `FRONTEND_PORT`               | `int`        |
-| `CHROMADB_PORT`               | `int`        |
-| `POSTGRES_PORT`               | `int`        |
+| Environment Variable          | Valid Values | Example                |
+|-------------------------------|--------------|------------------------|
+| `GEMINI_API_KEY`              | `str`        | `API_KEY`              |
+| `GEMINI_MODEL`                | `str`        | `gemini-2.5-flash`     |
+| `GEMINI_EMBEDDING_MODEL`      | `str`        | `gemini-embedding-001` |
+| `HUGGINGFACE_EMBEDDING_MODEL` | `str`        | `all-MiniLM-L6-v2`     |
+| `OLLAMA_MODEL`                | `str`        | `llama3.2`             |
+| `CHUNK_SIZE`                  | `int`        | `1000`                 |
+| `CHUNK_OVERLAP`               | `int`        | `200`                  |
+| `CHROMADB_INDEX`              | `str`        | `chatdocs`             |
+| `CHROMADB_PRESET`             | `str`        | `./vectorstore`        |    
+| `POSTGRES_USER`               | `str`        | `user`                 |
+| `POSTGRES_PASSWORD`           | `str`        | `password`             |
+| `POSTGRES_DB`                 | `str`        | `chatdocs`             |
+| `BACKEND_PORT`                | `int`        | `9010`                 |
+| `FRONTEND_PORT`               | `int`        | `9011`                 |
+| `CHROMADB_PORT`               | `int`        | `9012`                 |
+| `POSTGRES_PORT`               | `int`        | `9013`                 |
 
 
 If you use ollama model, you need to set up [ollama](https://ollama.com/download) first.
