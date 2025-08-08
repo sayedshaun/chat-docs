@@ -1,4 +1,6 @@
 import time
+import functools
+import asyncio
 import logging
 from typing import Callable, List
 
@@ -9,11 +11,23 @@ logging.basicConfig(
 )
 
 
-def calculate_execution_time(func: Callable) -> Callable:
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        logging.info(f"Function {func.__name__} took {end_time - start_time:.2f} seconds")
-        return result
-    return wrapper
+
+def calculate_execution_time(func):
+    if asyncio.iscoroutinefunction(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            start = time.perf_counter()
+            result = await func(*args, **kwargs)
+            duration = time.perf_counter() - start
+            logging.info(f"{func.__name__} executed in {duration:.2f} seconds.")
+            return result
+        return wrapper
+    else:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            start = time.perf_counter()
+            result = func(*args, **kwargs)
+            duration = time.perf_counter() - start
+            logging.info(f"{func.__name__} executed in {duration:.2f} seconds.")
+            return result
+        return wrapper
